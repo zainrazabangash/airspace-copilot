@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+
+# Environment Variables (API keys)
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Generated Data (keep structure, ignore content)
+data/snapshots/*.json
+data/alerts/*.json
+
+# Keep directory structure
+!data/snapshots/.gitkeep
+!data/alerts/.gitkeep
+
+# n8n Docker data
+.n8n/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,214 @@
+{
+    "name": "Airspace Copilot - n8n Gateway",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "mcp/flights/list_region_snapshot",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "wh1",
+            "name": "Webhook: Region",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1.1,
+            "position": [
+                200,
+                300
+            ],
+            "webhookId": "region-api"
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=http://host.docker.internal:8003/api/snapshot?region_name={{ $json.query.region_name || 'USA_East_Coast' }}",
+                "options": {}
+            },
+            "id": "http1",
+            "name": "Call Backend Region",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "resp1",
+            "name": "Return Region",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                600,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "path": "mcp/flights/get_by_callsign",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "wh2",
+            "name": "Webhook: Flight",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1.1,
+            "position": [
+                200,
+                450
+            ],
+            "webhookId": "flight-api"
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=http://host.docker.internal:8003/api/flight?callsign={{ $json.query.callsign }}",
+                "options": {}
+            },
+            "id": "http2",
+            "name": "Call Backend Flight",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "resp2",
+            "name": "Return Flight",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                600,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "path": "mcp/alerts/list_active",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "wh3",
+            "name": "Webhook: Alerts",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1.1,
+            "position": [
+                200,
+                600
+            ],
+            "webhookId": "alerts-api"
+        },
+        {
+            "parameters": {
+                "method": "GET",
+                "url": "=http://host.docker.internal:8003/api/alerts?max_age_hours={{ $json.query.max_age_hours || 24 }}",
+                "options": {}
+            },
+            "id": "http3",
+            "name": "Call Backend Alerts",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                600
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ $json }}",
+                "options": {}
+            },
+            "id": "resp3",
+            "name": "Return Alerts",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                600,
+                600
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook: Region": {
+            "main": [
+                [
+                    {
+                        "node": "Call Backend Region",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Backend Region": {
+            "main": [
+                [
+                    {
+                        "node": "Return Region",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook: Flight": {
+            "main": [
+                [
+                    {
+                        "node": "Call Backend Flight",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Backend Flight": {
+            "main": [
+                [
+                    {
+                        "node": "Return Flight",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook: Alerts": {
+            "main": [
+                [
+                    {
+                        "node": "Call Backend Alerts",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Call Backend Alerts": {
+            "main": [
+                [
+                    {
+                        "node": "Return Alerts",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {},
+    "staticData": null,
+    "tags": []
+}

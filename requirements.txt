@@ -1,0 +1,32 @@
+# Core Agentic Framework
+crewai
+crewai-tools
+
+# LLM Provider
+groq
+litellm
+
+# Web Framework & API
+fastapi
+uvicorn
+streamlit
+
+# MCP (Model Context Protocol)
+mcp
+
+# HTTP & Networking
+requests
+httpx
+
+# Data Processing
+pandas
+pydantic
+
+# Environment & Configuration
+python-dotenv
+
+# Utilities
+python-json-logger
+pytz
+
+watchdog
