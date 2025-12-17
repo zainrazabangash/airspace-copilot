@@ -40,6 +40,12 @@ The system has two AI agents that work together:
 * **Ops Analyst Agent**: Monitors regions, detects anomalies, provides operational summaries
 * **Traveler Support Agent**: Answers traveler questions about specific flights
 
+## n8n Workflow
+
+The workflow exposes three webhook endpoints that route requests to the backend API:
+
+![n8n Workflow](screenshots/n8n_workflow.png)
+
 ## Installation
 
 ### Prerequisites
